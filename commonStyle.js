@@ -31,7 +31,6 @@ export default StyleSheet.create({
   },
   btn: {
     height: 44,
-    backgroundColor: 'blue',
     minWidth: 120,
   },
   btnTxt: {

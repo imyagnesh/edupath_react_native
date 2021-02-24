@@ -49,6 +49,7 @@ const App = () => {
     setTodoList([json, ...todoList]);
     inputRef.current.clear();
     inputRef.current.blur();
+    setFilterType('all');
   };
 
   const deleteTodo = async (task) => {
@@ -153,6 +154,7 @@ const App = () => {
         <View style={[styles.row]}>
           <EPButton
             btnStyle={[styles.flex]}
+            highlighted={filterType === 'all'}
             onPress={() => {
               setFilterType('all');
             }}>
@@ -160,6 +162,7 @@ const App = () => {
           </EPButton>
           <EPButton
             btnStyle={[styles.flex]}
+            highlighted={filterType === 'pending'}
             onPress={() => {
               setFilterType('pending');
             }}>
@@ -170,6 +173,7 @@ const App = () => {
             textProps={{
               numberOfLines: 1,
             }}
+            highlighted={filterType === 'completed'}
             onPress={() => {
               setFilterType('completed');
             }}>
