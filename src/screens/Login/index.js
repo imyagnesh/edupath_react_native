@@ -1,32 +1,37 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View} from 'react-native';
-import {Formik, Field} from 'formik';
+import axios from '../../utils/axios';
 import styles from '../../../commonStyle';
 import EPText from '../../components/EPText';
-import EPButton from '../../components/EPButton';
 import fields, {loginInitialValues} from './fields';
+import EPForm from '../../components/EPForm';
+import {storeData} from '../../utils';
+import {UserContext} from '../../context/userContext';
 
 const Login = ({navigation}) => {
-  const onSubmit = async (value) => {};
+  const {setUser} = useContext(UserContext);
+  const onSubmit = async (value, actions) => {
+    try {
+      const res = await axios.post('auth/local', value);
+      await storeData('token', res.data);
+      setUser(res.data);
+      actions.resetForm();
+    } catch (e) {
+      actions.setFieldError('serverError', e.message);
+    }
+  };
+
   return (
     <View style={[styles.flex, styles.margin8]}>
       <EPText variant="h1" style={[styles.textCenter, styles.marginV8]}>
         Login
       </EPText>
-      <Formik initialValues={loginInitialValues} onSubmit={onSubmit}>
-        {({handleSubmit}) => (
-          <>
-            {fields(handleSubmit).map((x) => (
-              <View style={[styles.marginV8]}>
-                <Field {...x} />
-              </View>
-            ))}
-            <EPButton btnStyle={[styles.marginV8]} onPress={handleSubmit}>
-              Submit
-            </EPButton>
-          </>
-        )}
-      </Formik>
+      <EPForm
+        initialValues={loginInitialValues}
+        onSubmit={onSubmit}
+        fields={fields}
+        btnText="Submit"
+      />
     </View>
   );
 };

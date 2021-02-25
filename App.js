@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 // import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {enableScreens} from 'react-native-screens';
@@ -7,6 +7,9 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {AppearanceProvider, useColorScheme} from 'react-native-appearance';
 import {getData} from './src/utils';
 import {EPDarkTheme, EPLightTheme} from './src/theme';
+import UserProvider, {UserContext} from './src/context/userContext';
+import {ActivityIndicator, View} from 'react-native';
+import styles from './commonStyle';
 // import {createStackNavigator} from '@react-navigation/stack';
 // import Login from './src/screens/Login';
 // import Register from './src/screens/Register';
@@ -53,35 +56,43 @@ const Home = () => {
   );
 };
 
-const App = () => {
-  const [isAuth, setIsAuth] = useState(false);
+const AppContainer = () => {
   const scheme = useColorScheme();
+  const {user, loading} = useContext(UserContext);
 
-  useEffect(() => {
-    const checkAUTH = async () => {
-      const token = await getData('token');
-      if (token) {
-        setIsAuth(true);
-      } else {
-        setIsAuth(false);
-      }
-    };
-    checkAUTH();
-  }, []);
+  const theme = scheme === 'dark' ? EPDarkTheme : EPLightTheme;
+
+  if (loading) {
+    return (
+      <View style={[styles.flex, styles.center]}>
+        <ActivityIndicator
+          animating
+          size="large"
+          color={theme.colors.primary}
+        />
+      </View>
+    );
+  }
+
   return (
     <AppearanceProvider>
-      <NavigationContainer
-        theme={scheme === 'dark' ? EPDarkTheme : EPLightTheme}>
+      <NavigationContainer theme={theme}>
         <Stack.Navigator
           screenOptions={{
             headerShown: false,
           }}>
-          {!isAuth && <Stack.Screen name="auth" component={Auth} />}
-          {isAuth && <Stack.Screen name="home" component={Home} />}
+          {!user && <Stack.Screen name="auth" component={Auth} />}
+          {user && <Stack.Screen name="home" component={Home} />}
         </Stack.Navigator>
       </NavigationContainer>
     </AppearanceProvider>
   );
 };
+
+const App = () => (
+  <UserProvider>
+    <AppContainer />
+  </UserProvider>
+);
 
 export default App;

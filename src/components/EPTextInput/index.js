@@ -5,7 +5,7 @@ import EPText from '../EPText';
 import styles from './styles';
 
 const EPTextInput = ({
-  field, // { name, value, onChange, onBlur }
+  field: {name, value, onBlur},
   form: {touched, errors, handleChange, handleBlur}, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
   style,
   innerRef,
@@ -16,19 +16,20 @@ const EPTextInput = ({
     <>
       <TextInput
         ref={innerRef}
+        name={name}
+        value={value}
         style={[
           styles.textInput,
           {borderColor: colors.border, color: colors.text},
           style,
         ]}
         keyboardAppearance={dark ? 'dark' : 'light'}
-        {...field}
         {...props}
-        onChangeText={handleChange(field.name)}
-        onBlur={handleBlur(field.name)}
+        onChangeText={handleChange(name)}
+        onBlur={handleBlur(name)}
       />
-      {touched[field.name] && errors[field.name] && (
-        <EPText variant="error">{errors[field.name]}</EPText>
+      {touched[name] && errors[name] && (
+        <EPText variant="error">{errors[name]}</EPText>
       )}
     </>
   );
