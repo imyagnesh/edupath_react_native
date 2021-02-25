@@ -7,8 +7,10 @@ import fields, {loginInitialValues} from './fields';
 import EPForm from '../../components/EPForm';
 import {storeData} from '../../utils';
 import {UserContext} from '../../context/userContext';
+import {useTheme} from '@react-navigation/native';
 
 const Login = ({navigation}) => {
+  const {colors} = useTheme();
   const {setUser} = useContext(UserContext);
   const onSubmit = async (value, actions) => {
     try {
@@ -19,6 +21,10 @@ const Login = ({navigation}) => {
     } catch (e) {
       actions.setFieldError('serverError', e.message);
     }
+  };
+
+  const onClickRegister = () => {
+    navigation.navigate('registration');
   };
 
   return (
@@ -32,6 +38,15 @@ const Login = ({navigation}) => {
         fields={fields}
         btnText="Submit"
       />
+      <EPText variant="body2" style={[styles.textCenter, styles.marginV8]}>
+        Don't have an account,{' '}
+        <EPText
+          variant="body2"
+          style={{color: colors.primary}}
+          onPress={onClickRegister}>
+          Register
+        </EPText>
+      </EPText>
     </View>
   );
 };
