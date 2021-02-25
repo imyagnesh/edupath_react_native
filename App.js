@@ -1,19 +1,14 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext} from 'react';
 // import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {enableScreens} from 'react-native-screens';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {AppearanceProvider, useColorScheme} from 'react-native-appearance';
-import {getData} from './src/utils';
 import {EPDarkTheme, EPLightTheme} from './src/theme';
 import UserProvider, {UserContext} from './src/context/userContext';
 import {ActivityIndicator, View} from 'react-native';
 import styles from './commonStyle';
-// import {createStackNavigator} from '@react-navigation/stack';
-// import Login from './src/screens/Login';
-// import Register from './src/screens/Register';
-// import Splash from './src/screens/Splash';
 
 enableScreens();
 const Stack = createNativeStackNavigator();
