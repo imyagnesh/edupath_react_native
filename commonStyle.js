@@ -29,10 +29,50 @@ export default StyleSheet.create({
   paddingH12: {
     paddingHorizontal: 12,
   },
+
+  margin8: {
+    margin: 8,
+  },
+  marginV8: {
+    marginVertical: 8,
+  },
+  marginH8: {
+    marginHorizontal: 8,
+  },
+  padding8: {
+    padding: 8,
+  },
+  paddingV8: {
+    paddingVertical: 8,
+  },
+  paddingH8: {
+    paddingHorizontal: 8,
+  },
+
+  margin4: {
+    margin: 4,
+  },
+  marginV4: {
+    marginVertical: 4,
+  },
+  marginH4: {
+    marginHorizontal: 4,
+  },
+  padding4: {
+    padding: 4,
+  },
+  paddingV4: {
+    paddingVertical: 4,
+  },
+  paddingH4: {
+    paddingHorizontal: 4,
+  },
+
   btn: {
     height: 44,
     backgroundColor: 'blue',
     minWidth: 120,
+    borderRadius: 4,
   },
   btnTxt: {
     fontSize: 18,

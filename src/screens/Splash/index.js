@@ -1,11 +1,14 @@
-import React from 'react';
-import {SafeAreaView, Text, Button} from 'react-native';
+import React, {useEffect} from 'react';
+import {SafeAreaView} from 'react-native';
+import {getData} from '../../utils';
+import styles from '../../../commonStyle';
+import EPText from '../../components/EPText';
 
-const Splash = ({navigation}) => {
+const Splash = ({navigation: {navigate}}) => {
   return (
-    <SafeAreaView>
-      <Text>Splash Screen</Text>
-      <Button
+    <SafeAreaView style={[styles.flex, styles.center]}>
+      <EPText variant="h1">Splash Screen</EPText>
+      {/* <Button
         title="Auth"
         onPress={() => {
           navigation.navigate('auth');
@@ -16,7 +19,7 @@ const Splash = ({navigation}) => {
         onPress={() => {
           navigation.navigate('home');
         }}
-      />
+      /> */}
     </SafeAreaView>
   );
 };

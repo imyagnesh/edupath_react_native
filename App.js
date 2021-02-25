@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 // import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {enableScreens} from 'react-native-screens';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {AppearanceProvider, useColorScheme} from 'react-native-appearance';
+import {getData} from './src/utils';
+import {EPDarkTheme, EPLightTheme} from './src/theme';
 // import {createStackNavigator} from '@react-navigation/stack';
 // import Login from './src/screens/Login';
 // import Register from './src/screens/Register';
@@ -51,20 +54,33 @@ const Home = () => {
 };
 
 const App = () => {
+  const [isAuth, setIsAuth] = useState(false);
+  const scheme = useColorScheme();
+
+  useEffect(() => {
+    const checkAUTH = async () => {
+      const token = await getData('token');
+      if (token) {
+        setIsAuth(true);
+      } else {
+        setIsAuth(false);
+      }
+    };
+    checkAUTH();
+  }, []);
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}>
-        <Stack.Screen
-          name="splash"
-          getComponent={() => require('./src/screens/Splash').default}
-        />
-        <Stack.Screen name="auth" component={Auth} />
-        <Stack.Screen name="home" component={Home} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <AppearanceProvider>
+      <NavigationContainer
+        theme={scheme === 'dark' ? EPDarkTheme : EPLightTheme}>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}>
+          {!isAuth && <Stack.Screen name="auth" component={Auth} />}
+          {isAuth && <Stack.Screen name="home" component={Home} />}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </AppearanceProvider>
   );
 };
 
