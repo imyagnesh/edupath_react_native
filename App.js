@@ -8,6 +8,7 @@ import {AppearanceProvider, useColorScheme} from 'react-native-appearance';
 import {EPDarkTheme, EPLightTheme} from './src/theme';
 import UserProvider, {UserContext} from './src/context/userContext';
 import {ActivityIndicator, View} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import styles from './commonStyle';
 
 enableScreens();
@@ -30,6 +31,19 @@ const Auth = () => {
   );
 };
 
+const HomeStack = createNativeStackNavigator();
+
+const HomeScreen = () => {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen
+        name="homePage"
+        getComponent={() => require('./src/screens/Home').default}
+      />
+    </HomeStack.Navigator>
+  );
+};
+
 const Tab = createBottomTabNavigator();
 
 const Home = () => {
@@ -37,15 +51,45 @@ const Home = () => {
     <Tab.Navigator>
       <Tab.Screen
         name="homePage"
-        getComponent={() => require('./src/screens/Home').default}
+        component={HomeScreen}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({color, size, focused}) => (
+            <Icon
+              name={focused ? 'home' : 'home-outline'}
+              color={color}
+              size={size}
+            />
+          ),
+        }}
       />
       <Tab.Screen
         name="likes"
         getComponent={() => require('./src/screens/Like').default}
+        options={{
+          tabBarLabel: 'Likes',
+          tabBarIcon: ({color, size, focused}) => (
+            <Icon
+              name={focused ? 'heart' : 'heart-outline'}
+              color={color}
+              size={size}
+            />
+          ),
+        }}
       />
       <Tab.Screen
         name="settings"
         getComponent={() => require('./src/screens/Settings').default}
+        options={{
+          tabBarLabel: 'Settings',
+          tabBarIcon: ({color, size, focused}) => (
+            <Icon
+              name={focused ? 'settings' : 'settings-outline'}
+              color={color}
+              size={size}
+            />
+          ),
+        }}
       />
     </Tab.Navigator>
   );
