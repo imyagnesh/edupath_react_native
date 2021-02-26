@@ -1,27 +1,27 @@
-import React, {useContext} from 'react';
+import React, {memo} from 'react';
+import {connect} from 'react-redux';
 import {View} from 'react-native';
-import axios from '../../utils/axios';
 import styles from '../../../commonStyle';
 import EPText from '../../components/EPText';
 import fields, {loginInitialValues} from './fields';
 import EPForm from '../../components/EPForm';
-import {storeData} from '../../utils';
-import {UserContext} from '../../context/userContext';
-import {useTheme} from '@react-navigation/native';
 
-const Login = ({navigation}) => {
-  const {colors} = useTheme();
-  const {setUser} = useContext(UserContext);
-  const onSubmit = async (value, actions) => {
-    try {
-      const res = await axios.post('auth/local', value);
-      await storeData('token', res.data);
-      setUser(res.data);
-      actions.resetForm();
-    } catch (e) {
-      actions.setFieldError('serverError', e.message);
-    }
-  };
+const Login = ({navigation, user, onLogin}) => {
+  // const {setUser} = useContext(UserContext);
+
+  // const onSubmit = useCallback(
+  //   async (value, actions) => {
+  //     try {
+  //       const res = await axios.post('auth/local', value);
+  //       await storeData('token', res.data);
+  //       setUser(res.data);
+  //       actions.resetForm();
+  //     } catch (e) {
+  //       actions.setFieldError('serverError', e.message);
+  //     }
+  //   },
+  //   [setUser],
+  // );
 
   const onClickRegister = () => {
     navigation.navigate('registration');
@@ -34,7 +34,7 @@ const Login = ({navigation}) => {
       </EPText>
       <EPForm
         initialValues={loginInitialValues}
-        onSubmit={onSubmit}
+        onSubmit={onLogin}
         fields={fields}
         btnText="Submit"
       />
@@ -51,4 +51,15 @@ const Login = ({navigation}) => {
   );
 };
 
-export default Login;
+const mapStoreToProps = (store) => {
+  return {user: store.user};
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onLogin: (value, actions) =>
+      dispatch({type: 'FETCH_USER_REQUEST', payload: value, meta: actions}),
+  };
+};
+
+export default connect(mapStoreToProps, mapDispatchToProps)(memo(Login));
