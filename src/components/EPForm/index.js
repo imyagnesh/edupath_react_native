@@ -1,11 +1,12 @@
-import React from 'react';
-import {Formik, Field} from 'formik';
+import React, {memo} from 'react';
+import {Formik, FastField} from 'formik';
 import {View} from 'react-native';
 import EPButton from '../EPButton';
 import styles from '../../../commonStyle';
 import EPText from '../EPText';
 
 const EPForm = ({fields, btnText, ...rest}) => {
+  console.log('EPForm render');
   return (
     <Formik {...rest}>
       {({handleSubmit, isSubmitting, errors}) => (
@@ -19,7 +20,7 @@ const EPForm = ({fields, btnText, ...rest}) => {
           )}
           {fields(handleSubmit).map((x) => (
             <View style={[styles.marginV8]} key={x.name}>
-              <Field {...x} />
+              <FastField {...x} />
             </View>
           ))}
           <EPButton
@@ -35,4 +36,6 @@ const EPForm = ({fields, btnText, ...rest}) => {
   );
 };
 
-export default EPForm;
+export default memo(EPForm, (prevProp, nextProps) => {
+  return false;
+});

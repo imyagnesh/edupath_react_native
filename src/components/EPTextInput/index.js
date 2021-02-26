@@ -1,6 +1,8 @@
 import {useTheme} from '@react-navigation/native';
-import React, {forwardRef} from 'react';
-import {TextInput} from 'react-native';
+import React, {memo, useState} from 'react';
+import {Pressable, TextInput} from 'react-native';
+import VisibilityIcon from '../../assets/icons/visibility.svg';
+import VisibilityOffIcon from '../../assets/icons/visibility_off.svg';
 import EPText from '../EPText';
 import styles from './styles';
 
@@ -9,11 +11,25 @@ const EPTextInput = ({
   form: {touched, errors, handleChange, handleBlur}, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
   style,
   innerRef,
+  secureTextEntry,
   ...props
 }) => {
   const {colors, dark} = useTheme();
+  const [isSecureText, setIsSecureText] = useState(secureTextEntry);
+
   return (
     <>
+      {secureTextEntry && (
+        <Pressable
+          onPress={() => setIsSecureText(!isSecureText)}
+          style={[styles.eyeIcon]}>
+          {isSecureText ? (
+            <VisibilityOffIcon width={24} height={24} fill={colors.primary} />
+          ) : (
+            <VisibilityIcon width={24} height={24} fill={colors.primary} />
+          )}
+        </Pressable>
+      )}
       <TextInput
         ref={innerRef}
         name={name}
@@ -23,6 +39,7 @@ const EPTextInput = ({
           {borderColor: colors.border, color: colors.text},
           style,
         ]}
+        secureTextEntry={isSecureText}
         keyboardAppearance={dark ? 'dark' : 'light'}
         {...props}
         onChangeText={handleChange(name)}
@@ -35,4 +52,4 @@ const EPTextInput = ({
   );
 };
 
-export default EPTextInput;
+export default memo(EPTextInput);

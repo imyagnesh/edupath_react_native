@@ -11,4 +11,10 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
+  eyeIcon: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 10,
+  },
 });
