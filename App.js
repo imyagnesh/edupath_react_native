@@ -5,10 +5,12 @@ import {enableScreens} from 'react-native-screens';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {AppearanceProvider, useColorScheme} from 'react-native-appearance';
+import {connect, Provider} from 'react-redux';
 import {EPDarkTheme, EPLightTheme} from './src/theme';
 import UserProvider, {UserContext} from './src/context/userContext';
 import {ActivityIndicator, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import store from './src/configureStore';
 import styles from './commonStyle';
 
 enableScreens();
@@ -95,13 +97,12 @@ const Home = () => {
   );
 };
 
-const AppContainer = () => {
+const AppContainer = ({token}) => {
   const scheme = useColorScheme();
-  const {user, loading} = useContext(UserContext);
 
   const theme = scheme === 'dark' ? EPDarkTheme : EPLightTheme;
 
-  if (loading) {
+  if (token.loading) {
     return (
       <View style={[styles.flex, styles.center]}>
         <ActivityIndicator
@@ -120,18 +121,28 @@ const AppContainer = () => {
           screenOptions={{
             headerShown: false,
           }}>
-          {!user && <Stack.Screen name="auth" component={Auth} />}
-          {user && <Stack.Screen name="home" component={Home} />}
+          {/* {!token.user && <Stack.Screen name="auth" component={Auth} />} */}
+          <Stack.Screen name="home" component={Home} />
         </Stack.Navigator>
       </NavigationContainer>
     </AppearanceProvider>
   );
 };
 
+const mapStateToProps = (state) => {
+  return {
+    token: state.user,
+  };
+};
+
+const AppReducer = connect(mapStateToProps)(AppContainer);
+
 const App = () => (
-  <UserProvider>
-    <AppContainer />
-  </UserProvider>
+  <Provider store={store}>
+    <UserProvider>
+      <AppReducer />
+    </UserProvider>
+  </Provider>
 );
 
 export default App;

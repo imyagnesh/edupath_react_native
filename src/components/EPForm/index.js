@@ -6,7 +6,6 @@ import styles from '../../../commonStyle';
 import EPText from '../EPText';
 
 const EPForm = ({fields, btnText, ...rest}) => {
-  console.log('EPForm render');
   return (
     <Formik {...rest}>
       {({handleSubmit, isSubmitting, errors}) => (
