@@ -1,4 +1,5 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
+import {useNetInfo} from '@react-native-community/netinfo';
 // import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {enableScreens} from 'react-native-screens';
@@ -8,6 +9,7 @@ import {AppearanceProvider, useColorScheme} from 'react-native-appearance';
 import {connect, Provider} from 'react-redux';
 import {EPDarkTheme, EPLightTheme} from './src/theme';
 import UserProvider, {UserContext} from './src/context/userContext';
+import EPText from './src/components/EPText';
 import {ActivityIndicator, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import store from './src/configureStore';
@@ -99,8 +101,17 @@ const Home = () => {
 
 const AppContainer = ({token}) => {
   const scheme = useColorScheme();
+  const netInfo = useNetInfo();
 
   const theme = scheme === 'dark' ? EPDarkTheme : EPLightTheme;
+
+  if (!netInfo.isConnected) {
+    return (
+      <View style={[styles.flex, styles.center]}>
+        <EPText>Internet is not connected</EPText>
+      </View>
+    );
+  }
 
   if (token.loading) {
     return (
